@@ -1,49 +1,74 @@
 //StretchKata10
 //for lighthouse labs prep modules
+// return a recipe that has one ingredient from each bakery
+//generalized the prompt to allow for any number of bakeries and ingredients
 
-const chooseRecipe = function(bakeryA, bakeryB, recipes) {
-  let output;
-  for (recipe of recipes){
-    if(bakeryA.includes(recipe.ingredients[0]) && bakeryB.includes(recipe.ingredients[1])){ return recipe.name }  //check one option
-    if(bakeryB.includes(recipe.ingredients[0]) && bakeryA.includes(recipe.ingredients[1])){ return recipe.name }  //check the other option
+
+const chooseRecipe = (bakeryObj, recipesList) => {
+  const bakeriesArr = Object.values(bakeryObj);
+
+  for (const { name, ingredients } of recipesList) {
+    /* Shallow copy used to remove bakeries when they are used in a recipe */
+    const bakeriesLeftArr = [...bakeriesArr];
+
+    for (const ingredient of ingredients) {
+        
+      for (let i = 0; i < bakeriesLeftArr.length; i++) {
+        if (bakeriesLeftArr[i].includes(ingredient)) {
+          bakeriesLeftArr.splice(i, 1);
+          break;
+        }
+      }
+     
+    }
+
+    if (bakeriesLeftArr.length === 0) {
+      return name;
+    }
+    
   }
- return undefined;
-}
 
-let bakeryA = ['saffron', 'eggs', 'tomato paste', 'coconut', 'custard'];
-let bakeryB = ['milk', 'butter', 'cream cheese'];
+};
+
+let bakeries = {
+  A: ['saffron',
+    'eggs',
+    'tomato paste',
+    'coconut',
+    'custard'],
+  B: ['milk', 'butter', 'cream cheese'],
+  C: ['steamed hams', 'steamed clams']
+};
 let recipes = [
-    {
-        name: 'Coconut Sponge Cake',
-        ingredients: ['coconut', 'cake base']
-    },
-    {
-        name: 'Persian Cheesecake',
-        ingredients: ['saffron', 'cream cheese']
-    },
-    {
-        name: 'Custard Surprise',
-        ingredients: ['custard', 'ground beef']
-    }
+  {
+    name: 'Coconut Sponge Cake',
+    ingredients: ['coconut', 'cake base', 'socks']
+  },
+  {
+    name: 'Persian Cheesecake',
+    ingredients: ['saffron', 'cream cheese', 'steamed hams']
+  },
+  {
+    name: 'Custard Surprise',
+    ingredients: ['custard', 'ground beef', 'crushed surprise']
+  }
 ];
 
-console.log(chooseRecipe(bakeryA, bakeryB, recipes));
+console.log(chooseRecipe(bakeries, recipes));
 
-bakeryA = ['potatoes', 'bay leaf', 'raisins'];
-bakeryB = ['red bean', 'dijon mustard', 'apples'];
-recipes = [
-    {
-        name: 'Potato Ganache',
-        ingredients: ['potatoes', 'chocolate']
-    },
-    {
-        name: 'Sweet Fish',
-        ingredients: ['anchovies', 'honey']
-    },
-    {
-        name: "Nima's Famous Dijon Raisins",
-        ingredients: ['dijon mustard', 'raisins']
-    }
+let recipes2 = [
+  {
+    name: 'Coconut Sponge Cake',
+    ingredients: ['coconut', 'cake base', 'shoes']
+  },
+  {
+    name: 'Persian Cheesecake v2.0',
+    ingredients: ['butter', 'eggs', 'steamed clams']
+  },
+  {
+    name: 'Custard Surprise',
+    ingredients: ['custard', 'ground beef', 'crushed surprise']
+  }
 ];
 
-console.log(chooseRecipe(bakeryA, bakeryB, recipes));
+console.log(chooseRecipe(bakeries, recipes2));
